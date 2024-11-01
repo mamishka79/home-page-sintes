@@ -4,21 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authorization Complete</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 600px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <h1>Авторизация завершена</h1>
     <p id="instruction">Ваш код авторизации:</p>
     <p id="code"></p>
+    <button id="copyButton">Скопировать код</button>
+    <p id="message" style="color: green;"></p>
 
     <script>
-        // Извлечение кода из URL
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
+        const codeElement = document.getElementById('code');
+        const instructionElement = document.getElementById('instruction');
+        const messageElement = document.getElementById('message');
+
         if (code) {
-            document.getElementById('code').textContent = code;
+            codeElement.textContent = code;
         } else {
-            document.getElementById('instruction').textContent = 'Код авторизации не найден. Попробуйте снова.';
+            instructionElement.textContent = 'Код авторизации не найден. Попробуйте снова.';
         }
+
+        document.getElementById('copyButton').addEventListener('click', () => {
+            if (code) {
+                navigator.clipboard.writeText(code).then(() => {
+                    messageElement.textContent = 'Код скопирован в буфер обмена!';
+                }).catch(err => {
+                    messageElement.textContent = 'Ошибка при копировании кода.';
+                });
+            }
+        });
     </script>
 </body>
 </html>
